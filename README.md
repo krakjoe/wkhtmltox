@@ -11,7 +11,7 @@ class wkhtmltox\PDF\Converter {
 	/**
 	* @param array see https://wkhtmltopdf.org/libwkhtmltox/pagesettings.html#pagePdfGlobal
 	**/
-	public function __construct(array $settings = []);
+	public function __construct(?array $settings);
 
 	public function add(wkhtmltox\PDF\Object $object);
 
@@ -23,7 +23,7 @@ class wkhtmltox\PDF\Object {
 	* @param string html
 	* @param array see https://wkhtmltopdf.org/libwkhtmltox/pagesettings.html#pagePdfObject
 	**/
-	public function __construct(string $html, array $settings = []);
+	public function __construct(string $html, ?array $settings);
 }
 
 class wkhtmltox\Image\Converter {
@@ -31,7 +31,7 @@ class wkhtmltox\Image\Converter {
 	* @param string html
 	* @param array see https://wkhtmltopdf.org/libwkhtmltox/pagesettings.html#pageImageGlobal
 	**/
-	public function __construct(string $html, array $settings = []);
+	public function __construct(?string $html, ?array $settings);
 
 	public function convert() ?string;
 }
