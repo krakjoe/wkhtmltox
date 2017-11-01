@@ -68,3 +68,13 @@ $converter = new ImageConverter(null, [
 
 $converter->convert();
 ```
+
+Notes
+=====
+
+  * Warnings from libwkhtmltox raise ZE warnings
+  * Errors from libwkhtmltox raise ZE exceptions (RuntimeException)
+  * Settings are accessible read only as properties or dimensions after construction
+  * It is not possible to change settings after object construction
+  * Validation of the possible values for settings is not good
+
