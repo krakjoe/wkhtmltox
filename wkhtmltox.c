@@ -28,12 +28,14 @@
 #include "php_wkhtmltox.h"
 
 #include "src/pdf.h"
+#include "src/image.h"
 
 /* {{{ PHP_MINIT_FUNCTION
  */
 PHP_MINIT_FUNCTION(wkhtmltox)
 {
 	PHP_MINIT(wkhtmltox_pdf)(INIT_FUNC_ARGS_PASSTHRU);
+	PHP_MINIT(wkhtmltox_image)(INIT_FUNC_ARGS_PASSTHRU);
 
 	return SUCCESS;
 }
@@ -43,7 +45,9 @@ PHP_MINIT_FUNCTION(wkhtmltox)
  */
 PHP_MSHUTDOWN_FUNCTION(wkhtmltox)
 {
-	
+	PHP_MSHUTDOWN(wkhtmltox_pdf)(INIT_FUNC_ARGS_PASSTHRU);
+	PHP_MSHUTDOWN(wkhtmltox_image)(INIT_FUNC_ARGS_PASSTHRU);
+
 	return SUCCESS;
 }
 /* }}} */

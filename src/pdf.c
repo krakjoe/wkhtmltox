@@ -27,109 +27,101 @@
 #include <ext/spl/spl_exceptions.h>
 
 #include "src/pdf.h"
-
-#if PHP_VERSION_ID < 70100
-#	define RETURN_VALUE_USED(opline) (!((opline)->result_type & EXT_TYPE_UNUSED))
-#else
-#	define RETURN_VALUE_USED(opline) ((opline)->result_type != IS_UNUSED)
-#endif
-
-typedef struct _php_wkhtmltopdf_setting_t {
-	char *name;
-	zend_long length;
-} php_wkhtmltopdf_setting_t;
-
-#define PHP_WKHTMLTOPDF_SETTING_CTOR(s)    {(s),  sizeof(s)-1},
-#define PHP_WKHTMLTOPDF_SETTING_END 	   {NULL, 0}
-
-#define PHP_WKHTMLTOPDF_SETTING_OK 0
-#define PHP_WKHTMLTOPDF_SETTING_EX 1
+#include "src/common.h"
 
 zend_object_handlers php_wkhtmltopdf_handlers;
 zend_object_handlers php_wkhtmltopdf_object_handlers;
 
-static php_wkhtmltopdf_setting_t php_wkhtmltopdf_global_settings[] = {
-	PHP_WKHTMLTOPDF_SETTING_CTOR("size.pageSize")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("size.width")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("size.height")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("orientation")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("colorMode")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("resolution")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("dpi")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("pageOffset")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("copies")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("collate")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("outline")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("outlineDepth")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("dumpOutline")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("out")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("documentTitle")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("useCompression")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("margin.top")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("margin.bottom")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("margin.left")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("margin.right")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("imageDPI")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("imageQuality")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("load.cookiejar")
-	PHP_WKHTMLTOPDF_SETTING_END
+void php_wkhtmltopdf_warn(php_wkhtmltopdf_t *w, const char *warn) {
+	zend_error(E_WARNING, "%s", warn);
+}
+
+void php_wkhtmltopdf_error(php_wkhtmltopdf_t *w, const char *error) {
+	zend_throw_exception_ex(spl_ce_RuntimeException, 2, "%s", error);
+}
+
+static php_wkhtmltox_setting_t php_wkhtmltopdf_global_settings[] = {
+	PHP_WKHTMLTOX_SETTING_CTOR("size.pageSize")
+	PHP_WKHTMLTOX_SETTING_CTOR("size.width")
+	PHP_WKHTMLTOX_SETTING_CTOR("size.height")
+	PHP_WKHTMLTOX_SETTING_CTOR("orientation")
+	PHP_WKHTMLTOX_SETTING_CTOR("colorMode")
+	PHP_WKHTMLTOX_SETTING_CTOR("resolution")
+	PHP_WKHTMLTOX_SETTING_CTOR("dpi")
+	PHP_WKHTMLTOX_SETTING_CTOR("pageOffset")
+	PHP_WKHTMLTOX_SETTING_CTOR("copies")
+	PHP_WKHTMLTOX_SETTING_CTOR("collate")
+	PHP_WKHTMLTOX_SETTING_CTOR("outline")
+	PHP_WKHTMLTOX_SETTING_CTOR("outlineDepth")
+	PHP_WKHTMLTOX_SETTING_CTOR("dumpOutline")
+	PHP_WKHTMLTOX_SETTING_CTOR("out")
+	PHP_WKHTMLTOX_SETTING_CTOR("documentTitle")
+	PHP_WKHTMLTOX_SETTING_CTOR("useCompression")
+	PHP_WKHTMLTOX_SETTING_CTOR("margin.top")
+	PHP_WKHTMLTOX_SETTING_CTOR("margin.bottom")
+	PHP_WKHTMLTOX_SETTING_CTOR("margin.left")
+	PHP_WKHTMLTOX_SETTING_CTOR("margin.right")
+	PHP_WKHTMLTOX_SETTING_CTOR("imageDPI")
+	PHP_WKHTMLTOX_SETTING_CTOR("imageQuality")
+	PHP_WKHTMLTOX_SETTING_CTOR("load.cookiejar")
+	PHP_WKHTMLTOX_SETTING_END
 };
 
-static php_wkhtmltopdf_setting_t php_wkhtmltopdf_object_settings[] = {
-	PHP_WKHTMLTOPDF_SETTING_CTOR("toc.useDottedLines")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("toc.captionText")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("toc.forwardLinks")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("toc.backLinks")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("toc.indentation")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("toc.fontScale")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("page")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("useExternalLinks")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("useLocalLinks")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("replacements")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("produceForms")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("includeInOutLine")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("pagesCount")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("tocXsl")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("header.fontSize")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("header.fontName")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("header.left")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("header.center")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("header.right")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("header.line")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("header.spacing")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("header.htmlUrl")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("footer.fontSize")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("footer.fontName")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("footer.left")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("footer.center")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("footer.right")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("footer.line")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("footer.spacing")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("footer.htmlUrl")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("load.username")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("load.password")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("load.jsdelay")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("load.zoomFactor")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("load.customHeaders")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("load.repertCustomHeaders")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("load.cookies")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("load.post")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("load.blockLocalFileAccess")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("load.stopSlowScript")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("load.debugJavascript")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("load.loadErrorHandling")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("load.proxy")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("load.runScript")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("web.background")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("web.loadImages")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("web.enableJavascript")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("web.enableIntelligentShrinking")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("web.minimumFontSize")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("web.printMediaType")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("web.defaultEncoding")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("web.userStyleSheet")
-	PHP_WKHTMLTOPDF_SETTING_CTOR("web.enablePlugins")
-	PHP_WKHTMLTOPDF_SETTING_END
+static php_wkhtmltox_setting_t php_wkhtmltopdf_object_settings[] = {
+	PHP_WKHTMLTOX_SETTING_CTOR("toc.useDottedLines")
+	PHP_WKHTMLTOX_SETTING_CTOR("toc.captionText")
+	PHP_WKHTMLTOX_SETTING_CTOR("toc.forwardLinks")
+	PHP_WKHTMLTOX_SETTING_CTOR("toc.backLinks")
+	PHP_WKHTMLTOX_SETTING_CTOR("toc.indentation")
+	PHP_WKHTMLTOX_SETTING_CTOR("toc.fontScale")
+	PHP_WKHTMLTOX_SETTING_CTOR("page")
+	PHP_WKHTMLTOX_SETTING_CTOR("useExternalLinks")
+	PHP_WKHTMLTOX_SETTING_CTOR("useLocalLinks")
+	PHP_WKHTMLTOX_SETTING_CTOR("replacements")
+	PHP_WKHTMLTOX_SETTING_CTOR("produceForms")
+	PHP_WKHTMLTOX_SETTING_CTOR("includeInOutLine")
+	PHP_WKHTMLTOX_SETTING_CTOR("pagesCount")
+	PHP_WKHTMLTOX_SETTING_CTOR("tocXsl")
+	PHP_WKHTMLTOX_SETTING_CTOR("header.fontSize")
+	PHP_WKHTMLTOX_SETTING_CTOR("header.fontName")
+	PHP_WKHTMLTOX_SETTING_CTOR("header.left")
+	PHP_WKHTMLTOX_SETTING_CTOR("header.center")
+	PHP_WKHTMLTOX_SETTING_CTOR("header.right")
+	PHP_WKHTMLTOX_SETTING_CTOR("header.line")
+	PHP_WKHTMLTOX_SETTING_CTOR("header.spacing")
+	PHP_WKHTMLTOX_SETTING_CTOR("header.htmlUrl")
+	PHP_WKHTMLTOX_SETTING_CTOR("footer.fontSize")
+	PHP_WKHTMLTOX_SETTING_CTOR("footer.fontName")
+	PHP_WKHTMLTOX_SETTING_CTOR("footer.left")
+	PHP_WKHTMLTOX_SETTING_CTOR("footer.center")
+	PHP_WKHTMLTOX_SETTING_CTOR("footer.right")
+	PHP_WKHTMLTOX_SETTING_CTOR("footer.line")
+	PHP_WKHTMLTOX_SETTING_CTOR("footer.spacing")
+	PHP_WKHTMLTOX_SETTING_CTOR("footer.htmlUrl")
+	PHP_WKHTMLTOX_SETTING_CTOR("load.username")
+	PHP_WKHTMLTOX_SETTING_CTOR("load.password")
+	PHP_WKHTMLTOX_SETTING_CTOR("load.jsdelay")
+	PHP_WKHTMLTOX_SETTING_CTOR("load.zoomFactor")
+	PHP_WKHTMLTOX_SETTING_CTOR("load.customHeaders")
+	PHP_WKHTMLTOX_SETTING_CTOR("load.repertCustomHeaders")
+	PHP_WKHTMLTOX_SETTING_CTOR("load.cookies")
+	PHP_WKHTMLTOX_SETTING_CTOR("load.post")
+	PHP_WKHTMLTOX_SETTING_CTOR("load.blockLocalFileAccess")
+	PHP_WKHTMLTOX_SETTING_CTOR("load.stopSlowScript")
+	PHP_WKHTMLTOX_SETTING_CTOR("load.debugJavascript")
+	PHP_WKHTMLTOX_SETTING_CTOR("load.loadErrorHandling")
+	PHP_WKHTMLTOX_SETTING_CTOR("load.proxy")
+	PHP_WKHTMLTOX_SETTING_CTOR("load.runScript")
+	PHP_WKHTMLTOX_SETTING_CTOR("web.background")
+	PHP_WKHTMLTOX_SETTING_CTOR("web.loadImages")
+	PHP_WKHTMLTOX_SETTING_CTOR("web.enableJavascript")
+	PHP_WKHTMLTOX_SETTING_CTOR("web.enableIntelligentShrinking")
+	PHP_WKHTMLTOX_SETTING_CTOR("web.minimumFontSize")
+	PHP_WKHTMLTOX_SETTING_CTOR("web.printMediaType")
+	PHP_WKHTMLTOX_SETTING_CTOR("web.defaultEncoding")
+	PHP_WKHTMLTOX_SETTING_CTOR("web.userStyleSheet")
+	PHP_WKHTMLTOX_SETTING_CTOR("web.enablePlugins")
+	PHP_WKHTMLTOX_SETTING_END
 };
 
 zend_object* php_wkhtmltopdf_create(zend_class_entry *ce) {
@@ -184,21 +176,8 @@ void php_wkhtmltopdf_object_destroy(zend_object *o) {
 	zend_object_std_dtor(&w->std);
 }
 
-int php_wkhtmltopdf_converter_setting_applicator(const php_wkhtmltopdf_setting_t *settings, zend_string *key, zval *value) {
-
-	for (; settings && settings->name; settings++) {
-		if (ZSTR_LEN(key) == settings->length) {
-			if (memcmp(ZSTR_VAL(key), settings->name, settings->length) == SUCCESS) {
-				return PHP_WKHTMLTOPDF_SETTING_OK;
-			}
-		}
-	}
-
-	return PHP_WKHTMLTOPDF_SETTING_EX;
-}
-
 /* {{{ */
-PHP_METHOD(Converter, __construct) 
+PHP_METHOD(PDF, __construct) 
 {
 	php_wkhtmltopdf_t *w = php_wkhtmltopdf_fetch(getThis());
 	HashTable *settings = NULL;
@@ -211,7 +190,7 @@ PHP_METHOD(Converter, __construct)
 
 	if (settings) {
 		ZEND_HASH_FOREACH_STR_KEY_VAL(settings, key, value) {
-			if (php_wkhtmltopdf_converter_setting_applicator(php_wkhtmltopdf_global_settings, key, value) == PHP_WKHTMLTOPDF_SETTING_OK) {
+			if (php_wkhtmltox_setting_applicator(php_wkhtmltopdf_global_settings, key, value) == PHP_WKHTMLTOX_SETTING_OK) {
 				zval tmp;
 
 				ZVAL_UNDEF(&tmp);
@@ -237,17 +216,20 @@ PHP_METHOD(Converter, __construct)
 				}
 			} else {
 				zend_throw_exception_ex(spl_ce_RuntimeException, 
-					PHP_WKHTMLTOPDF_SETTING_EX, "%s is not a valid global setting", ZSTR_VAL(key));
+					PHP_WKHTMLTOX_SETTING_EX, "%s is not a valid global setting", ZSTR_VAL(key));
 				return;
 			}
 		} ZEND_HASH_FOREACH_END();
 	}
 
 	w->converter = wkhtmltopdf_create_converter(w->settings);
+
+	wkhtmltopdf_set_warning_callback(w->converter, (wkhtmltopdf_str_callback) php_wkhtmltopdf_warn);
+	wkhtmltopdf_set_error_callback(w->converter, (wkhtmltopdf_str_callback) php_wkhtmltopdf_error);
 } /* }}} */
 
 /* {{{ */
-PHP_METHOD(Converter, add)
+PHP_METHOD(PDF, add)
 {
 	php_wkhtmltopdf_t *w = php_wkhtmltopdf_fetch(getThis());
 	php_wkhtmltopdf_object_t *o = NULL;
@@ -263,7 +245,7 @@ PHP_METHOD(Converter, add)
 } /* }}} */
 
 /* {{{ */
-PHP_METHOD(Converter, convert)
+PHP_METHOD(PDF, convert)
 {
 	php_wkhtmltopdf_t *w = php_wkhtmltopdf_fetch(getThis());
 
@@ -295,9 +277,9 @@ ZEND_BEGIN_ARG_INFO_EX(php_wkhtmltopdf_converter_convert_arginfo, 0, 0, 0)
 ZEND_END_ARG_INFO()
 
 zend_function_entry php_wkhtmltopdf_methods[] = {
-	PHP_ME(Converter, __construct, php_wkhtmltopdf_converter_construct_arginfo, ZEND_ACC_PUBLIC)
-	PHP_ME(Converter, add, php_wkhtmltopdf_converter_add_arginfo, ZEND_ACC_PUBLIC)
-	PHP_ME(Converter, convert, php_wkhtmltopdf_converter_convert_arginfo, ZEND_ACC_PUBLIC)
+	PHP_ME(PDF, __construct, php_wkhtmltopdf_converter_construct_arginfo, ZEND_ACC_PUBLIC)
+	PHP_ME(PDF, add, php_wkhtmltopdf_converter_add_arginfo, ZEND_ACC_PUBLIC)
+	PHP_ME(PDF, convert, php_wkhtmltopdf_converter_convert_arginfo, ZEND_ACC_PUBLIC)
     PHP_FE_END
 };
 
@@ -316,7 +298,7 @@ PHP_METHOD(Object, __construct)
 
 	if (settings) {
 		ZEND_HASH_FOREACH_STR_KEY_VAL(settings, key, value) {
-			if (php_wkhtmltopdf_converter_setting_applicator(php_wkhtmltopdf_object_settings, key, value) == PHP_WKHTMLTOPDF_SETTING_OK) {
+			if (php_wkhtmltox_setting_applicator(php_wkhtmltopdf_object_settings, key, value) == PHP_WKHTMLTOX_SETTING_OK) {
 				zval tmp;
 
 				ZVAL_UNDEF(&tmp);
@@ -341,7 +323,7 @@ PHP_METHOD(Object, __construct)
 				}
 			} else {
 				zend_throw_exception_ex(spl_ce_RuntimeException, 
-					PHP_WKHTMLTOPDF_SETTING_EX, "%s is not a valid object setting", ZSTR_VAL(key));
+					PHP_WKHTMLTOX_SETTING_EX, "%s is not a valid object setting", ZSTR_VAL(key));
 				return;
 			}
 		} ZEND_HASH_FOREACH_END();
@@ -385,6 +367,11 @@ PHP_MINIT_FUNCTION(wkhtmltox_pdf)
 	php_wkhtmltopdf_object_handlers.free_obj = php_wkhtmltopdf_object_destroy;
 
 	wkhtmltopdf_init(0);
+}
+
+PHP_MSHUTDOWN_FUNCTION(wkhtmltox_pdf)
+{
+	wkhtmltopdf_deinit();
 }
 #endif
 

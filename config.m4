@@ -39,5 +39,5 @@ if test "$PHP_WKHTMLTOX" != "no"; then
 
   PHP_SUBST(WKHTMLTOX_SHARED_LIBADD)
   PHP_ADD_BUILD_DIR($ext_builddir/src, 1)
-  PHP_NEW_EXTENSION(wkhtmltox, wkhtmltox.c src/pdf.c, $ext_shared,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
+  PHP_NEW_EXTENSION(wkhtmltox, wkhtmltox.c src/pdf.c src/image.c, $ext_shared,, -DZEND_ENABLE_STATIC_TSRMLS_CACHE=1)
 fi

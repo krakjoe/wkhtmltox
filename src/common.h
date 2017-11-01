@@ -15,36 +15,38 @@
   | Author: krakjoe                                                      |
   +----------------------------------------------------------------------+
 */
-#ifndef HAVE_PHP_WKHTMLTOX_PDF_H
-#define HAVE_PHP_WKHTMLTOX_PDF_H
+#ifndef HAVE_PHP_WKHTMLTOX_COMMON_H
+#define HAVE_PHP_WKHTMLTOX_COMMON_H
 
-#include "php_wkhtmltox.h"
+#if PHP_VERSION_ID < 70100
+#	define RETURN_VALUE_USED(opline) (!((opline)->result_type & EXT_TYPE_UNUSED))
+#else
+#	define RETURN_VALUE_USED(opline) ((opline)->result_type != IS_UNUSED)
+#endif
 
-#include <wkhtmltox/pdf.h>
+typedef struct _php_wkhtmltox_setting_t {
+	char *name;
+	zend_long length;
+} php_wkhtmltox_setting_t;
 
-PHP_MINIT_FUNCTION(wkhtmltox_pdf);
-PHP_MSHUTDOWN_FUNCTION(wkhtmltox_pdf);
+#define PHP_WKHTMLTOX_SETTING_CTOR(s)    {(s),  sizeof(s)-1},
+#define PHP_WKHTMLTOX_SETTING_END 	   {NULL, 0}
 
-PHP_WKHTMLTOX_API zend_class_entry* wkhtmltox_pdf_ce;
-PHP_WKHTMLTOX_API zend_class_entry* wkhtmltox_pdf_object_ce;
+#define PHP_WKHTMLTOX_SETTING_OK 0
+#define PHP_WKHTMLTOX_SETTING_EX 1
 
-typedef struct _php_wkhtmltopdf_t {
-	wkhtmltopdf_converter *converter;
-	wkhtmltopdf_global_settings *settings;
-	zend_object std;
-} php_wkhtmltopdf_t;
+static inline int php_wkhtmltox_setting_applicator(const php_wkhtmltox_setting_t *settings, zend_string *key, zval *value) {
 
-#define php_wkhtmltopdf_from(object) ((php_wkhtmltopdf_t*) ((char*)object - XtOffsetOf(php_wkhtmltopdf_t, std)))
-#define php_wkhtmltopdf_fetch(zend) php_wkhtmltopdf_from(Z_OBJ_P(zend))
+	for (; settings && settings->name; settings++) {
+		if (ZSTR_LEN(key) == settings->length) {
+			if (memcmp(ZSTR_VAL(key), settings->name, settings->length) == SUCCESS) {
+				return PHP_WKHTMLTOX_SETTING_OK;
+			}
+		}
+	}
 
-typedef struct _php_wkhtmltopdf_object_t {
-	wkhtmltopdf_object_settings *settings;
-	zend_string *data;
-	zend_object std;
-} php_wkhtmltopdf_object_t;
-
-#define php_wkhtmltopdf_object_from(object) ((php_wkhtmltopdf_object_t*) ((char*)object - XtOffsetOf(php_wkhtmltopdf_object_t, std)))
-#define php_wkhtmltopdf_object_fetch(zend) php_wkhtmltopdf_object_from(Z_OBJ_P(zend))
+	return PHP_WKHTMLTOX_SETTING_EX;
+}
 
 #endif
 
