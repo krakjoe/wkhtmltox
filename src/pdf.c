@@ -191,28 +191,31 @@ PHP_METHOD(PDF, __construct)
 	if (settings) {
 		ZEND_HASH_FOREACH_STR_KEY_VAL(settings, key, value) {
 			if (php_wkhtmltox_setting_applicator(php_wkhtmltopdf_global_settings, key, value) == PHP_WKHTMLTOX_SETTING_OK) {
-				zval tmp;
+				zval tmp[2];
 
-				ZVAL_UNDEF(&tmp);
+				ZVAL_UNDEF(&tmp[0]);
+				ZVAL_STR(&tmp[1], key);
 
 				if (Z_TYPE_P(value) != IS_STRING) {
-					ZVAL_COPY(&tmp, value);
+					ZVAL_COPY(&tmp[0], value);
 
 					if (Z_TYPE_P(value) == IS_TRUE || Z_TYPE_P(value) == IS_FALSE) {
 						if (Z_TYPE_P(value) == IS_TRUE) {
-							ZVAL_STRING(&tmp, "true");
-						} else ZVAL_STRING(&tmp, "false");
+							ZVAL_STRING(&tmp[0], "true");
+						} else ZVAL_STRING(&tmp[0], "false");
 					} else {
-						convert_to_string(&tmp);
+						convert_to_string(&tmp[0]);
 					}
 
-					value = &tmp;
+					value = &tmp[0];
 				}
 
 				wkhtmltopdf_set_global_setting(w->settings, ZSTR_VAL(key), Z_STRVAL_P(value));
 
-				if (!Z_ISUNDEF(tmp)) {
-					zval_ptr_dtor(&tmp);
+				zend_std_write_property(getThis(), &tmp[1], value, NULL);
+
+				if (!Z_ISUNDEF(tmp[0])) {
+					zval_ptr_dtor(&tmp[0]);
 				}
 			} else {
 				zend_throw_exception_ex(spl_ce_RuntimeException, 
@@ -283,6 +286,29 @@ zend_function_entry php_wkhtmltopdf_methods[] = {
     PHP_FE_END
 };
 
+zval* php_wkhtmltopdf_get(zval *object, zval *offset, int type, zval *rv) {
+	php_wkhtmltopdf_t *w = php_wkhtmltopdf_fetch(object);
+	zval tmp, *property;
+
+	ZVAL_UNDEF(&tmp);
+	
+	if (Z_TYPE_P(offset) != IS_STRING) {
+		ZVAL_COPY(&tmp, offset);
+
+		convert_to_string(&tmp);
+
+		offset = &tmp;
+	}
+
+	property = zend_read_property(w->std.ce, object, Z_STRVAL_P(offset), Z_STRLEN_P(offset), 1, rv);
+
+	if (!Z_ISUNDEF(tmp)) {
+		zval_ptr_dtor(&tmp);
+	}
+
+	return property;
+}
+
 /* {{{ */
 PHP_METHOD(Object, __construct)
 {
@@ -299,27 +325,30 @@ PHP_METHOD(Object, __construct)
 	if (settings) {
 		ZEND_HASH_FOREACH_STR_KEY_VAL(settings, key, value) {
 			if (php_wkhtmltox_setting_applicator(php_wkhtmltopdf_object_settings, key, value) == PHP_WKHTMLTOX_SETTING_OK) {
-				zval tmp;
+				zval tmp[2];
 
-				ZVAL_UNDEF(&tmp);
+				ZVAL_UNDEF(&tmp[0]);
+				ZVAL_STR(&tmp[1], key);
 
 				if (Z_TYPE_P(value) != IS_STRING) {
-					ZVAL_COPY(&tmp, value);
+					ZVAL_COPY(&tmp[0], value);
 
 					if (Z_TYPE_P(value) == IS_TRUE || Z_TYPE_P(value) == IS_FALSE) {
 						if (Z_TYPE_P(value) == IS_TRUE) {
-							ZVAL_STRING(&tmp, "true");
-						} else ZVAL_STRING(&tmp, "false");
+							ZVAL_STRING(&tmp[0], "true");
+						} else ZVAL_STRING(&tmp[0], "false");
 					} else {
-						convert_to_string(&tmp);
+						convert_to_string(&tmp[0]);
 					}
-					value = &tmp;
+					value = &tmp[0];
 				}
 
 				wkhtmltopdf_set_object_setting(w->settings, ZSTR_VAL(key), Z_STRVAL_P(value));
 
-				if (!Z_ISUNDEF(tmp)) {
-					zval_ptr_dtor(&tmp);
+				zend_std_write_property(getThis(), &tmp[1], value, NULL);
+
+				if (!Z_ISUNDEF(tmp[0])) {
+					zval_ptr_dtor(&tmp[0]);
 				}
 			} else {
 				zend_throw_exception_ex(spl_ce_RuntimeException, 
@@ -342,6 +371,29 @@ zend_function_entry php_wkhtmltopdf_object_methods[] = {
     PHP_FE_END
 };
 
+zval* php_wkhtmltopdf_object_get(zval *object, zval *offset, int type, zval *rv) {
+	php_wkhtmltopdf_object_t *w = php_wkhtmltopdf_object_fetch(object);
+	zval tmp, *property;
+
+	ZVAL_UNDEF(&tmp);
+	
+	if (Z_TYPE_P(offset) != IS_STRING) {
+		ZVAL_COPY(&tmp, offset);
+
+		convert_to_string(&tmp);
+
+		offset = &tmp;
+	}
+
+	property = zend_read_property(w->std.ce, object, Z_STRVAL_P(offset), Z_STRLEN_P(offset), 1, rv);
+
+	if (!Z_ISUNDEF(tmp)) {
+		zval_ptr_dtor(&tmp);
+	}
+
+	return property;
+}
+
 PHP_MINIT_FUNCTION(wkhtmltox_pdf)
 {
     zend_class_entry ce;
@@ -355,6 +407,9 @@ PHP_MINIT_FUNCTION(wkhtmltox_pdf)
 
 	php_wkhtmltopdf_handlers.offset = XtOffsetOf(php_wkhtmltopdf_t, std);
 	php_wkhtmltopdf_handlers.free_obj = php_wkhtmltopdf_destroy;
+	php_wkhtmltopdf_handlers.read_dimension = php_wkhtmltopdf_get;
+	php_wkhtmltopdf_handlers.write_property = (zend_object_write_property_t) php_wkhtmltox_disallowed;
+	php_wkhtmltopdf_handlers.write_dimension = (zend_object_write_dimension_t) php_wkhtmltox_disallowed;
 
 	INIT_NS_CLASS_ENTRY(ce, "WKHTMLTOX\\PDF", "Object", php_wkhtmltopdf_object_methods);
 	
@@ -365,6 +420,9 @@ PHP_MINIT_FUNCTION(wkhtmltox_pdf)
 
 	php_wkhtmltopdf_object_handlers.offset = XtOffsetOf(php_wkhtmltopdf_object_t, std);
 	php_wkhtmltopdf_object_handlers.free_obj = php_wkhtmltopdf_object_destroy;
+	php_wkhtmltopdf_object_handlers.read_dimension = php_wkhtmltopdf_object_get;
+	php_wkhtmltopdf_object_handlers.write_property = (zend_object_write_property_t) php_wkhtmltox_disallowed;
+	php_wkhtmltopdf_object_handlers.write_dimension = (zend_object_write_dimension_t) php_wkhtmltox_disallowed;
 
 	wkhtmltopdf_init(0);
 }

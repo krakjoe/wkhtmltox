@@ -30,6 +30,7 @@ PHP_WKHTMLTOX_API zend_class_entry* wkhtmltox_image_ce;
 typedef struct _php_wkhtmltoimage_t {
 	wkhtmltoimage_converter *converter;
 	wkhtmltoimage_global_settings *settings;
+	HashTable *hash;
 	zend_object std;
 } php_wkhtmltoimage_t;
 

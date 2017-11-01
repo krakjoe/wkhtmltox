@@ -31,6 +31,52 @@ var_dump(new wkhtmltox\PDF\Converter([
 ]));
 ?>
 --EXPECTF--
-object(WKHTMLTOX\PDF\Converter)#%d (0) {
+object(WKHTMLTOX\PDF\Converter)#%d (%d) {
+  ["size.pageSize"]=>
+  string(2) "A4"
+  ["size.width"]=>
+  string(5) "210mm"
+  ["size.height"]=>
+  string(5) "297mm"
+  ["orientation"]=>
+  string(8) "Portrait"
+  ["colorMode"]=>
+  string(5) "Color"
+  ["resolution"]=>
+  string(0) ""
+  ["dpi"]=>
+  string(2) "80"
+  ["pageOffset"]=>
+  string(1) "0"
+  ["copies"]=>
+  string(1) "1"
+  ["collate"]=>
+  string(5) "false"
+  ["outline"]=>
+  string(5) "false"
+  ["outlineDepth"]=>
+  string(1) "0"
+  ["dumpOutline"]=>
+  string(5) "false"
+  ["out"]=>
+  string(1) "-"
+  ["documentTitle"]=>
+  string(0) ""
+  ["useCompression"]=>
+  string(5) "false"
+  ["margin.top"]=>
+  string(1) "0"
+  ["margin.bottom"]=>
+  string(1) "0"
+  ["margin.left"]=>
+  string(1) "0"
+  ["margin.right"]=>
+  string(1) "0"
+  ["imageDPI"]=>
+  string(2) "80"
+  ["imageQuality"]=>
+  string(2) "80"
+  ["load.cookiejar"]=>
+  string(0) ""
 }
 

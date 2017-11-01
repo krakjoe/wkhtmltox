@@ -43,6 +43,77 @@ var_dump(new wkhtmltox\Image\Converter(null, [
 ]));
 ?>
 --EXPECTF--
-object(WKHTMLTOX\Image\Converter)#%d (0) {
+object(WKHTMLTOX\Image\Converter)#%d (%d) {
+  ["crop.left"]=>
+  string(1) "0"
+  ["crop.top"]=>
+  string(1) "0"
+  ["crop.width"]=>
+  string(1) "0"
+  ["crop.height"]=>
+  string(1) "0"
+  ["load.cookieJar"]=>
+  string(0) ""
+  ["load.username"]=>
+  string(0) ""
+  ["load.password"]=>
+  string(0) ""
+  ["load.jsdelay"]=>
+  string(1) "0"
+  ["load.zoomFactor"]=>
+  string(1) "0"
+  ["load.customHeaders"]=>
+  string(5) "false"
+  ["load.repertCustomHeaders"]=>
+  string(5) "false"
+  ["load.cookies"]=>
+  string(5) "false"
+  ["load.post"]=>
+  string(5) "false"
+  ["load.blockLocalFileAccess"]=>
+  string(5) "false"
+  ["load.stopSlowScript"]=>
+  string(5) "false"
+  ["load.debugJavascript"]=>
+  string(5) "false"
+  ["load.loadErrorHandling"]=>
+  string(5) "false"
+  ["load.proxy"]=>
+  string(5) "false"
+  ["load.runScript"]=>
+  string(0) ""
+  ["web.background"]=>
+  string(0) ""
+  ["web.loadImages"]=>
+  string(4) "true"
+  ["web.enableJavascript"]=>
+  string(4) "true"
+  ["web.enableIntelligentShrinking"]=>
+  string(5) "false"
+  ["web.minimumFontSize"]=>
+  string(0) ""
+  ["web.printMediaType"]=>
+  string(0) ""
+  ["web.defaultEncoding"]=>
+  string(0) ""
+  ["web.userStyleSheet"]=>
+  string(0) ""
+  ["web.enablePlugins"]=>
+  string(5) "false"
+  ["transparent"]=>
+  string(4) "true"
+  ["in"]=>
+  string(0) ""
+  ["out"]=>
+  string(0) ""
+  ["fmt"]=>
+  string(0) ""
+  ["screenWidth"]=>
+  string(0) ""
+  ["smartWidth"]=>
+  string(0) ""
+  ["quality"]=>
+  string(0) ""
 }
+
 

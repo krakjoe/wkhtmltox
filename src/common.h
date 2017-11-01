@@ -48,5 +48,9 @@ static inline int php_wkhtmltox_setting_applicator(const php_wkhtmltox_setting_t
 	return PHP_WKHTMLTOX_SETTING_EX;
 }
 
+static inline void php_wkhtmltox_disallowed(zval *object, zval *member, zval *value) {
+	zend_throw_exception_ex(spl_ce_RuntimeException, 4, 
+		"properties are read only, manipulation after construction is not possible");
+}
 #endif
 
