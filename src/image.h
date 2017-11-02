@@ -23,7 +23,8 @@
 #include <wkhtmltox/image.h>
 
 PHP_MINIT_FUNCTION(wkhtmltox_image);
-PHP_MSHUTDOWN_FUNCTION(wkhtmltox_image);
+PHP_RINIT_FUNCTION(wkhtmltox_image);
+PHP_RSHUTDOWN_FUNCTION(wkhtmltox_image);
 
 PHP_WKHTMLTOX_API zend_class_entry* wkhtmltox_image_ce;
 

@@ -24,7 +24,7 @@
 extern zend_module_entry wkhtmltox_module_entry;
 #define phpext_wkhtmltox_ptr &wkhtmltox_module_entry
 
-#define PHP_WKHTMLTOX_VERSION "0.3.0"
+#define PHP_WKHTMLTOX_VERSION "0.3.1"
 
 #ifdef PHP_WIN32
 #	define PHP_WKHTMLTOX_API __declspec(dllexport)

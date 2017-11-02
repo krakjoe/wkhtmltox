@@ -23,7 +23,6 @@ var_dump(new wkhtmltox\Image\Converter(null, [
 	"load.debugJavascript"      => false,
 	"load.loadErrorHandling"    => false,
 	"load.proxy"                => false,
-	"load.runScript"            => "",
 	"web.background"            => "",
 	"web.loadImages"            => true,
 	"web.enableJavascript"      => true,
@@ -80,8 +79,6 @@ object(WKHTMLTOX\Image\Converter)#%d (%d) {
   string(5) "false"
   ["load.proxy"]=>
   string(5) "false"
-  ["load.runScript"]=>
-  string(0) ""
   ["web.background"]=>
   string(0) ""
   ["web.loadImages"]=>

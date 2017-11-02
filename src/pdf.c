@@ -111,7 +111,6 @@ static php_wkhtmltox_setting_t php_wkhtmltopdf_object_settings[] = {
 	PHP_WKHTMLTOX_SETTING_CTOR("load.debugJavascript")
 	PHP_WKHTMLTOX_SETTING_CTOR("load.loadErrorHandling")
 	PHP_WKHTMLTOX_SETTING_CTOR("load.proxy")
-	PHP_WKHTMLTOX_SETTING_CTOR("load.runScript")
 	PHP_WKHTMLTOX_SETTING_CTOR("web.background")
 	PHP_WKHTMLTOX_SETTING_CTOR("web.loadImages")
 	PHP_WKHTMLTOX_SETTING_CTOR("web.enableJavascript")
@@ -423,11 +422,14 @@ PHP_MINIT_FUNCTION(wkhtmltox_pdf)
 	php_wkhtmltopdf_object_handlers.read_dimension = php_wkhtmltopdf_object_get;
 	php_wkhtmltopdf_object_handlers.write_property = (zend_object_write_property_t) php_wkhtmltox_disallowed;
 	php_wkhtmltopdf_object_handlers.write_dimension = (zend_object_write_dimension_t) php_wkhtmltox_disallowed;
+}
 
+PHP_RINIT_FUNCTION(wkhtmltox_pdf)
+{
 	wkhtmltopdf_init(0);
 }
 
-PHP_MSHUTDOWN_FUNCTION(wkhtmltox_pdf)
+PHP_RSHUTDOWN_FUNCTION(wkhtmltox_pdf)
 {
 	wkhtmltopdf_deinit();
 }

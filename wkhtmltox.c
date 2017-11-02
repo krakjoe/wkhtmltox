@@ -41,17 +41,6 @@ PHP_MINIT_FUNCTION(wkhtmltox)
 }
 /* }}} */
 
-/* {{{ PHP_MSHUTDOWN_FUNCTION
- */
-PHP_MSHUTDOWN_FUNCTION(wkhtmltox)
-{
-	PHP_MSHUTDOWN(wkhtmltox_pdf)(INIT_FUNC_ARGS_PASSTHRU);
-	PHP_MSHUTDOWN(wkhtmltox_image)(INIT_FUNC_ARGS_PASSTHRU);
-
-	return SUCCESS;
-}
-/* }}} */
-
 /* {{{ PHP_RINIT_FUNCTION
  */
 PHP_RINIT_FUNCTION(wkhtmltox)
@@ -59,6 +48,10 @@ PHP_RINIT_FUNCTION(wkhtmltox)
 #if defined(COMPILE_DL_WKHTMLTOX) && defined(ZTS)
 	ZEND_TSRMLS_CACHE_UPDATE();
 #endif
+
+	PHP_RINIT(wkhtmltox_pdf)(INIT_FUNC_ARGS_PASSTHRU);
+	PHP_RINIT(wkhtmltox_image)(INIT_FUNC_ARGS_PASSTHRU);
+
 	return SUCCESS;
 }
 /* }}} */
@@ -67,6 +60,9 @@ PHP_RINIT_FUNCTION(wkhtmltox)
  */
 PHP_RSHUTDOWN_FUNCTION(wkhtmltox)
 {
+	PHP_RSHUTDOWN(wkhtmltox_pdf)(INIT_FUNC_ARGS_PASSTHRU);
+	PHP_RSHUTDOWN(wkhtmltox_image)(INIT_FUNC_ARGS_PASSTHRU);
+
 	return SUCCESS;
 }
 /* }}} */
@@ -95,7 +91,7 @@ zend_module_entry wkhtmltox_module_entry = {
 	"wkhtmltox",
 	wkhtmltox_functions,
 	PHP_MINIT(wkhtmltox),
-	PHP_MSHUTDOWN(wkhtmltox),
+	NULL,
 	PHP_RINIT(wkhtmltox),
 	PHP_RSHUTDOWN(wkhtmltox),
 	PHP_MINFO(wkhtmltox),
