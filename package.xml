@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.9.4" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0 http://pear.php.net/dtd/tasks-1.0.xsd http://pear.php.net/dtd/package-2.0 http://pear.php.net/dtd/package-2.0.xsd">
+ <name>wkhtmltox</name>
+ <channel>pecl.php.net</channel>
+ <summary>HTML Converter</summary>
+ <description>Converting HTML to X since 2017</description>
+ <lead>
+  <name>Joe Watkins</name>
+  <user>krakjoe</user>
+  <email>krakjoe@php.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2017-11-10</date>
+ <time>12:00:00</time>
+ <version>
+  <release>0.3.1</release>
+  <api>0.3.1</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.php.net/license">PHP License</license>
+ <notes>
+ initial release
+ </notes>
+ <contents>
+  <dir name="/">
+	<file name="tests/image/001.phpt" role="test" />
+	<file name="tests/image/002.phpt" role="test" />
+	<file name="tests/image/003.phpt" role="test" />
+	<file name="tests/image/004.phpt" role="test" />
+	<file name="tests/image/005.phpt" role="test" />
+	<file name="tests/image/006.phpt" role="test" />
+	<file name="tests/image/007.phpt" role="test" />
+	<file name="tests/pdf/001.phpt" role="test" />
+	<file name="tests/pdf/002.phpt" role="test" />
+	<file name="tests/pdf/003.phpt" role="test" />
+	<file name="tests/pdf/004.phpt" role="test" />
+	<file name="tests/pdf/005.phpt" role="test" />
+	<file name="tests/pdf/006.phpt" role="test" />
+	<file name="tests/pdf/007.phpt" role="test" />
+	<file name="tests/pdf/008.phpt" role="test" />
+	<file name="tests/pdf/009.phpt" role="test" />
+	<file name="tests/pdf/010.phpt" role="test" />
+	<file name="tests/pdf/011.phpt" role="test" />
+   	<file name="src/common.h" role="src" />
+   	<file name="src/image.h" role="src" />
+   	<file name="src/image.c" role="src" />
+   	<file name="src/pdf.h" role="src" />
+   	<file name="src/pdf.c" role="src" />
+   	<file name="wkhtmltox.c" role="src" />
+   	<file name="php_wkhtmltox.h" role="src" />
+	<file name="config.m4" role="src" />
+	<file name="LICENSE" role="doc" />
+	<file name="README.md" role="doc" />
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>7.0.0RC5</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0b1</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <providesextension>wkhtmltox</providesextension>
+ <extsrcrelease />
+</package>
