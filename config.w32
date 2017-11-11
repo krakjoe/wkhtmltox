@@ -1,0 +1,19 @@
+// $Id$
+// vim:ft=javascript
+
+ARG_WITH("wkhtmltox", "for wkhtmltox support", "no");
+
+if (PHP_WKHTMLTOX != "no") {
+	if (CHECK_LIB("wkhtmltox.lib", "wkhtmltox", PHP_WKHTMLTOX + "/lib")) {
+		EXTENSION("wkhtmltox", "wkhtmltox.c");
+		ADD_SOURCES(
+			configure_module_dirname + "/src",
+			"pdf.c image.c", 
+			"wkhtmltox"
+		);
+		ADD_FLAG("CFLAGS_WKHTMLTOX", "/I" + configure_module_dirname + " /I\"" + PHP_WKHTMLTOX + "/include\"");		
+	} else {
+		WARNING("wkhtmltox not found in: " +  PHP_WKHTMLTOX + "/include/wkhtmltox")
+	}
+}
+
