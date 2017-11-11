@@ -31,7 +31,7 @@ install:
                 }
                 if (-not (Test-Path c:\build-cache\$lname1)) {
                         7z x c:\build-cache\$lname0 -oc:\build-cache\$lname1
-                        rmdir /s /q c:\build-cache\$lname1\$PLUGINSDIR
+                        remove-item -recurse -force c:\build-cache\$lname1\$PLUGINSDIR
                         del c:\build-cache\$lname1\uninstall.exe
                 }
 
@@ -144,8 +144,9 @@ test_script:
                 }
                 cd c:\projects\wkhtmltox
                 echo "" | Out-File -Encoding "ASCII" task.bat
-                $cmd = 'call configure --with-wkhtmltox --with-extra-libs=c:\build-cache\libwkhtmltox\lib --with-extra-includes=c:\build-cache\libwkhtmltox\include --enable-debug-pack 2>&1'
+                $cmd = 'call configure --with-wkhtmltox --with-extra-libs=c:\build-cache\libwkhtmltox\lib --with-extra-includes=c:\build-cache\libwkhtmltox\include --with-prefix=c:\build-cache\' + $dname + ' 2>&1'
                 echo $cmd | Out-File -Encoding "ASCII" -Append task.bat
+                echo 'set path=c:\build-cache\libwkhtmltox\bin;%path%' | Out-File -Encoding "ASCII" -Append task.bat
                 echo "nmake /nologo test TESTS=-q 2>&1" | Out-File -Encoding "ASCII" -Append task.bat
                 $here = (Get-Item -Path ".\" -Verbose).FullName
                 $runner = 'c:\build-cache\php-sdk-' + $env:BIN_SDK_VER + '\phpsdk' + '-' + $env:VC + '-' + $env:ARCH + '.bat'
