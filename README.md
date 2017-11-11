@@ -6,7 +6,7 @@ This extension wraps libwkhtmltox for PHP 7.
 Documentation
 ============
 
-Documentation can be found in the [PHP Manual](https://docs.php.net/wkhtmltox)
+Documentation can be found in the [PHP Manual](http://docs.php.net/wkhtmltox)
 
 Hello World (PDF)
 ===============
