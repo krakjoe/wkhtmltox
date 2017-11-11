@@ -428,7 +428,7 @@ PHP_MINIT_FUNCTION(wkhtmltox_pdf)
 
 PHP_RINIT_FUNCTION(wkhtmltox_pdf)
 {
-	wkhtmltopdf_init(0);
+	wkhtmltopdf_init(WG(graphics));
 
 	return SUCCESS;
 }

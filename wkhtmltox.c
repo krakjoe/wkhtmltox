@@ -30,16 +30,41 @@
 #include "src/pdf.h"
 #include "src/image.h"
 
+ZEND_DECLARE_MODULE_GLOBALS(wkhtmltox);
+
+/* {{{ */
+PHP_INI_BEGIN()
+	STD_PHP_INI_ENTRY("wkhtmltox.graphics", "0", PHP_INI_SYSTEM, OnUpdateBool, graphics, zend_wkhtmltox_globals, wkhtmltox_globals)
+PHP_INI_END() 
+/* }}} */
+
+/* {{{ */
+static void php_wkhtmltox_globals_ctor(zend_wkhtmltox_globals *wg) {
+	memset(wg, 0, sizeof(zend_wkhtmltox_globals));
+} /* }}} */
+
 /* {{{ PHP_MINIT_FUNCTION
  */
 PHP_MINIT_FUNCTION(wkhtmltox)
 {
+	ZEND_INIT_MODULE_GLOBALS(wkhtmltox, php_wkhtmltox_globals_ctor, NULL)
+
+	REGISTER_INI_ENTRIES();
+
 	PHP_MINIT(wkhtmltox_pdf)(INIT_FUNC_ARGS_PASSTHRU);
 	PHP_MINIT(wkhtmltox_image)(INIT_FUNC_ARGS_PASSTHRU);
 
 	return SUCCESS;
 }
 /* }}} */
+
+/* {{{ */
+PHP_MSHUTDOWN_FUNCTION(wkhtmltox)
+{
+	UNREGISTER_INI_ENTRIES();
+
+	return SUCCESS;
+} /* }}} */
 
 /* {{{ PHP_RINIT_FUNCTION
  */

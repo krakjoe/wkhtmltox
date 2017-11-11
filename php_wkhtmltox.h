@@ -42,6 +42,18 @@ extern zend_module_entry wkhtmltox_module_entry;
 ZEND_TSRMLS_CACHE_EXTERN()
 #endif
 
+ZEND_BEGIN_MODULE_GLOBALS(wkhtmltox)
+	zend_bool graphics;
+ZEND_END_MODULE_GLOBALS(wkhtmltox)
+
+ZEND_EXTERN_MODULE_GLOBALS(wkhtmltox);
+
+#ifdef ZTS
+#define WG(v) TSRMG(wkhtmltox_globals_id, zend_wkhtmltox_globals *, v)
+#else
+#define WG(v) (wkhtmltox_globals.v)
+#endif
+
 #endif	/* PHP_WKHTMLTOX_H */
 
 

@@ -237,7 +237,7 @@ PHP_MINIT_FUNCTION(wkhtmltox_image)
 
 PHP_RINIT_FUNCTION(wkhtmltox_image)
 {
-	wkhtmltoimage_init(0);
+	wkhtmltoimage_init(WG(graphics));
 
 	return SUCCESS;
 }
