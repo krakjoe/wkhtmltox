@@ -285,14 +285,14 @@ ZEND_BEGIN_ARG_INFO_EX(php_wkhtmltopdf_converter_add_arginfo, 0, 0, 1)
 	ZEND_ARG_OBJ_INFO(0, object, wkhtmltox\\PDF\\Object, 0)
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70300
+#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(php_wkhtmltopdf_converter_convert_arginfo, 0, 0, IS_STRING, 1)
 #else
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(php_wkhtmltopdf_converter_convert_arginfo, 0, 0, IS_STRING, NULL, 1)
 #endif
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70300
+#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(php_wkhtmltopdf_converter_version_arginfo, 0, 0, IS_STRING, 0)
 #else
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(php_wkhtmltopdf_converter_version_arginfo, 0, 0, IS_STRING, NULL, 0)
