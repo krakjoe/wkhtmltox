@@ -193,14 +193,14 @@ ZEND_BEGIN_ARG_INFO_EX(php_wkhtmltoimage_converter_construct_arginfo, 0, 0, 0)
 	ZEND_ARG_ARRAY_INFO(0, settings, 0)
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70300
+#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(php_wkhtmltoimage_converter_convert_arginfo, 0, 0, IS_STRING, 1)
 #else
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(php_wkhtmltoimage_converter_convert_arginfo, 0, 0, IS_STRING, NULL, 1)
 #endif
 ZEND_END_ARG_INFO()
 
-#if PHP_VERSION_ID >= 70300
+#if PHP_VERSION_ID >= 70200
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(php_wkhtmltoimage_converter_version_arginfo, 0, 0, IS_STRING, 0)
 #else
 ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(php_wkhtmltoimage_converter_version_arginfo, 0, 0, IS_STRING, NULL, 0)
