@@ -34,7 +34,7 @@ ZEND_DECLARE_MODULE_GLOBALS(wkhtmltox);
 
 /* {{{ */
 PHP_INI_BEGIN()
-	STD_PHP_INI_ENTRY("wkhtmltox.graphics", "0", PHP_INI_SYSTEM, OnUpdateBool, graphics, zend_wkhtmltox_globals, wkhtmltox_globals)
+	STD_PHP_INI_ENTRY("wkhtmltox.graphics", "0", PHP_INI_SYSTEM | PHP_INI_PERDIR, OnUpdateBool, graphics, zend_wkhtmltox_globals, wkhtmltox_globals)
 PHP_INI_END() 
 /* }}} */
 
