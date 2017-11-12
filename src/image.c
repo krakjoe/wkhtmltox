@@ -101,7 +101,7 @@ void php_wkhtmltoimage_destroy(zend_object *o) {
 	zend_object_std_dtor(&w->std);
 }
 
-/* {{{ proto Converter::__construct(?string html, ?array settings) */
+/* {{{ */
 PHP_METHOD(Image, __construct) 
 {
 	php_wkhtmltoimage_t *w = php_wkhtmltoimage_fetch(getThis());
@@ -157,7 +157,7 @@ PHP_METHOD(Image, __construct)
 	wkhtmltoimage_set_error_callback(w->converter, (wkhtmltoimage_str_callback) php_wkhtmltoimage_error);
 } /* }}} */
 
-/* {{{ proto ?string Converter::convert(void) */
+/* {{{ */
 PHP_METHOD(Image, convert)
 {
 	php_wkhtmltoimage_t *w = php_wkhtmltoimage_fetch(getThis());
@@ -178,17 +178,39 @@ PHP_METHOD(Image, convert)
 	}
 } /* }}} */
 
+/* {{{ */
+PHP_METHOD(Image, getVersion)
+{
+	if (zend_parse_parameters_none() != SUCCESS) {
+		return;
+	}
+
+	RETURN_STRING(wkhtmltoimage_version());
+} /* }}} */
+
 ZEND_BEGIN_ARG_INFO_EX(php_wkhtmltoimage_converter_construct_arginfo, 0, 0, 0)
 	ZEND_ARG_TYPE_INFO(0, buffer, IS_STRING, 1)
 	ZEND_ARG_ARRAY_INFO(0, settings, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(php_wkhtmltoimage_converter_convert_arginfo, 0, 0, 0)
+#if PHP_VERSION_ID >= 70300
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(php_wkhtmltoimage_converter_convert_arginfo, 0, 0, IS_STRING, 1)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(php_wkhtmltoimage_converter_convert_arginfo, 0, 0, IS_STRING, NULL, 1)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70300
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(php_wkhtmltoimage_converter_version_arginfo, 0, 0, IS_STRING, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(php_wkhtmltoimage_converter_version_arginfo, 0, 0, IS_STRING, NULL, 0)
+#endif
 ZEND_END_ARG_INFO()
 
 zend_function_entry php_wkhtmltoimage_methods[] = {
 	PHP_ME(Image, __construct, php_wkhtmltoimage_converter_construct_arginfo, ZEND_ACC_PUBLIC)
 	PHP_ME(Image, convert, php_wkhtmltoimage_converter_convert_arginfo, ZEND_ACC_PUBLIC)
+	PHP_ME(Image, getVersion, php_wkhtmltoimage_converter_version_arginfo, ZEND_ACC_PUBLIC)
     PHP_FE_END
 };
 

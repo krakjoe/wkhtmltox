@@ -267,6 +267,16 @@ PHP_METHOD(PDF, convert)
 	}
 } /* }}} */
 
+/* {{{ */
+PHP_METHOD(PDF, getVersion)
+{
+	if (zend_parse_parameters_none() != SUCCESS) {
+		return;
+	}
+
+	RETURN_STRING(wkhtmltopdf_version());
+} /* }}} */
+
 ZEND_BEGIN_ARG_INFO_EX(php_wkhtmltopdf_converter_construct_arginfo, 0, 0, 0)
 	ZEND_ARG_ARRAY_INFO(0, settings, 0)
 ZEND_END_ARG_INFO()
@@ -275,13 +285,25 @@ ZEND_BEGIN_ARG_INFO_EX(php_wkhtmltopdf_converter_add_arginfo, 0, 0, 1)
 	ZEND_ARG_OBJ_INFO(0, object, wkhtmltox\\PDF\\Object, 0)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(php_wkhtmltopdf_converter_convert_arginfo, 0, 0, 0)
+#if PHP_VERSION_ID >= 70300
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(php_wkhtmltopdf_converter_convert_arginfo, 0, 0, IS_STRING, 1)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(php_wkhtmltopdf_converter_convert_arginfo, 0, 0, IS_STRING, NULL, 1)
+#endif
+ZEND_END_ARG_INFO()
+
+#if PHP_VERSION_ID >= 70300
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(php_wkhtmltopdf_converter_version_arginfo, 0, 0, IS_STRING, 0)
+#else
+ZEND_BEGIN_ARG_WITH_RETURN_TYPE_INFO_EX(php_wkhtmltopdf_converter_version_arginfo, 0, 0, IS_STRING, NULL, 0)
+#endif
 ZEND_END_ARG_INFO()
 
 zend_function_entry php_wkhtmltopdf_methods[] = {
 	PHP_ME(PDF, __construct, php_wkhtmltopdf_converter_construct_arginfo, ZEND_ACC_PUBLIC)
 	PHP_ME(PDF, add, php_wkhtmltopdf_converter_add_arginfo, ZEND_ACC_PUBLIC)
 	PHP_ME(PDF, convert, php_wkhtmltopdf_converter_convert_arginfo, ZEND_ACC_PUBLIC)
+    PHP_ME(PDF, getVersion, php_wkhtmltopdf_converter_version_arginfo, ZEND_ACC_PUBLIC)
     PHP_FE_END
 };
 
