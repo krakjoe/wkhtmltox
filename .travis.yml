@@ -6,9 +6,10 @@ php:
     - nightly
 install:
     - wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
-    - tar -C ~/ -xf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
+    - mkdir /opt/wk
+    - tar -C /opt/wk -xf wkhtmltox-0.12.4_linux-generic-amd64.tar.xz
 script:
     - phpize
-    - ./configure --with-wkhtmltox=~/wkhtmltox
+    - ./configure --with-wkhtmltox=/opt/wk/wkhtmltox
     - make
     - REPORT_EXIT_STATUS=1 TEST_PHP_ARGS="-q --show-diff" make test
