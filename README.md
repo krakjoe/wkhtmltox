@@ -1,6 +1,10 @@
 wkhtmltox
 ========
 
+[![Build Status](https://travis-ci.org/krakjoe/wkhtmltox.svg?branch=master)](https://travis-ci.org/krakjoe/wkhtmltox)
+[![Build status](https://ci.appveyor.com/api/projects/status/vejunb25q1p9q5um?svg=true)](https://ci.appveyor.com/project/krakjoe/wkhtmltox/branch/master)
+
+
 This extension wraps libwkhtmltox for PHP 7.
 
 Documentation
