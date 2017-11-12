@@ -303,7 +303,7 @@ zend_function_entry php_wkhtmltopdf_methods[] = {
 	PHP_ME(PDF, __construct, php_wkhtmltopdf_converter_construct_arginfo, ZEND_ACC_PUBLIC)
 	PHP_ME(PDF, add, php_wkhtmltopdf_converter_add_arginfo, ZEND_ACC_PUBLIC)
 	PHP_ME(PDF, convert, php_wkhtmltopdf_converter_convert_arginfo, ZEND_ACC_PUBLIC)
-    PHP_ME(PDF, getVersion, php_wkhtmltopdf_converter_version_arginfo, ZEND_ACC_PUBLIC)
+    PHP_ME(PDF, getVersion, php_wkhtmltopdf_converter_version_arginfo, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
     PHP_FE_END
 };
 

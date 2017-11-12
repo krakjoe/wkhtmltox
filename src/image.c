@@ -210,7 +210,7 @@ ZEND_END_ARG_INFO()
 zend_function_entry php_wkhtmltoimage_methods[] = {
 	PHP_ME(Image, __construct, php_wkhtmltoimage_converter_construct_arginfo, ZEND_ACC_PUBLIC)
 	PHP_ME(Image, convert, php_wkhtmltoimage_converter_convert_arginfo, ZEND_ACC_PUBLIC)
-	PHP_ME(Image, getVersion, php_wkhtmltoimage_converter_version_arginfo, ZEND_ACC_PUBLIC)
+	PHP_ME(Image, getVersion, php_wkhtmltoimage_converter_version_arginfo, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
     PHP_FE_END
 };
 
