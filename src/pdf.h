@@ -23,8 +23,7 @@
 #include <wkhtmltox/pdf.h>
 
 PHP_MINIT_FUNCTION(wkhtmltox_pdf);
-PHP_RINIT_FUNCTION(wkhtmltox_pdf);
-PHP_RSHUTDOWN_FUNCTION(wkhtmltox_pdf);
+PHP_MSHUTDOWN_FUNCTION(wkhtmltox_pdf);
 
 PHP_WKHTMLTOX_API zend_class_entry* wkhtmltox_pdf_ce;
 PHP_WKHTMLTOX_API zend_class_entry* wkhtmltox_pdf_object_ce;

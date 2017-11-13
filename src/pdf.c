@@ -445,17 +445,12 @@ PHP_MINIT_FUNCTION(wkhtmltox_pdf)
 	php_wkhtmltopdf_object_handlers.write_property = (zend_object_write_property_t) php_wkhtmltox_disallowed;
 	php_wkhtmltopdf_object_handlers.write_dimension = (zend_object_write_dimension_t) php_wkhtmltox_disallowed;
 
-	return SUCCESS;
-}
-
-PHP_RINIT_FUNCTION(wkhtmltox_pdf)
-{
 	wkhtmltopdf_init(WG(graphics));
 
 	return SUCCESS;
 }
 
-PHP_RSHUTDOWN_FUNCTION(wkhtmltox_pdf)
+PHP_MSHUTDOWN_FUNCTION(wkhtmltox_pdf)
 {
 	wkhtmltopdf_deinit();
 
