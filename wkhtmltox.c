@@ -87,9 +87,9 @@ PHP_MINFO_FUNCTION(wkhtmltox)
 {
 	php_info_print_table_start();
 	php_info_print_table_header(2, "wkhtmltox support", "enabled");
-	php_info_print_table_header(2, "wkhtmltox version", PHP_WKHTMLTOX_VERSION);
-	php_info_print_table_header(2, "libwkhtmltox version", wkhtmltopdf_version());
-	php_info_print_table_header(2, "X11 server required", wkhtmltopdf_extended_qt() ? "No" : "Yes");
+	php_info_print_table_row(2, "wkhtmltox version", PHP_WKHTMLTOX_VERSION);
+	php_info_print_table_row(2, "libwkhtmltox version", wkhtmltopdf_version());
+	php_info_print_table_row(2, "X11 server required", wkhtmltopdf_extended_qt() ? "No" : "Yes");
 	php_info_print_table_end();
 }
 /* }}} */
