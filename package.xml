@@ -20,7 +20,7 @@
   <release>stable</release>
   <api>stable</api>
  </stability>
- <license uri="http://www.php.net/license">PHP License</license>
+  <license uri="http://opensource.org/licenses/BSD-2-Clause">BSD 2-clause</license>
  <notes>
  initial release
  </notes>
