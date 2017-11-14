@@ -183,7 +183,7 @@ PHP_METHOD(Image, convert)
 		size_t len = wkhtmltoimage_get_output(w->converter, &buff);
 
 		if (len) {
-			RETURN_STRINGL(buff, len);
+			RETURN_STRINGL((const char *)buff, len);
 		}
 	}
 } /* }}} */

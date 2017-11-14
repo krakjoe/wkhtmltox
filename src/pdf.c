@@ -272,7 +272,7 @@ PHP_METHOD(PDF, convert)
 		size_t len = wkhtmltopdf_get_output(w->converter, &buff);
 
 		if (len) {
-			RETURN_STRINGL(buff, len);
+			RETURN_STRINGL((const char *)buff, len);
 		}
 	}
 } /* }}} */
