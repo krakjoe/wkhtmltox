@@ -58,6 +58,13 @@ PHP_MINIT_FUNCTION(wkhtmltox)
 {
 	ZEND_INIT_MODULE_GLOBALS(wkhtmltox, php_wkhtmltox_globals_ctor, NULL)
 
+	if (!wkhtmltopdf_extended_qt()) {
+		zend_error(
+			E_WARNING,
+			"wkhtmltox extension has been compiled against a version of QT without the wkhtmltopdf patches. Therefore a X11 server is required."
+		);
+	}
+
 	REGISTER_INI_ENTRIES();
 
 	PHP_MINIT(wkhtmltox_pdf)(INIT_FUNC_ARGS_PASSTHRU);

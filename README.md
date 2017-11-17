@@ -7,6 +7,9 @@ wkhtmltox
 
 This extension wraps libwkhtmltox for PHP 7.
 
+It requires a libwkhtmltox compiled against a version of QT with the wkhtmltopdf patches
+to avoid the need of a X11 server.
+
 Documentation
 ============
 
