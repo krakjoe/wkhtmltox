@@ -33,11 +33,14 @@
 
 #include "php.h"
 #include "php_ini.h"
+#include "SAPI.h"
 #include "ext/standard/info.h"
 #include "php_wkhtmltox.h"
 
 #include "src/pdf.h"
 #include "src/image.h"
+
+#define WKHTMLTOX_USABLE (wkhtmltopdf_extended_qt() || !strcmp(sapi_module.name, "cli"))
 
 ZEND_DECLARE_MODULE_GLOBALS(wkhtmltox);
 
@@ -65,10 +68,12 @@ PHP_MINIT_FUNCTION(wkhtmltox)
 		);
 	}
 
-	REGISTER_INI_ENTRIES();
+	if (WKHTMLTOX_USABLE) {
+		REGISTER_INI_ENTRIES();
 
-	PHP_MINIT(wkhtmltox_pdf)(INIT_FUNC_ARGS_PASSTHRU);
-	PHP_MINIT(wkhtmltox_image)(INIT_FUNC_ARGS_PASSTHRU);
+		PHP_MINIT(wkhtmltox_pdf)(INIT_FUNC_ARGS_PASSTHRU);
+		PHP_MINIT(wkhtmltox_image)(INIT_FUNC_ARGS_PASSTHRU);
+	}
 
 	return SUCCESS;
 }
@@ -77,10 +82,12 @@ PHP_MINIT_FUNCTION(wkhtmltox)
 /* {{{ */
 PHP_MSHUTDOWN_FUNCTION(wkhtmltox)
 {
-	PHP_MSHUTDOWN(wkhtmltox_pdf)(INIT_FUNC_ARGS_PASSTHRU);
-	PHP_MSHUTDOWN(wkhtmltox_image)(INIT_FUNC_ARGS_PASSTHRU);
+	if (WKHTMLTOX_USABLE) {
+		PHP_MSHUTDOWN(wkhtmltox_pdf)(INIT_FUNC_ARGS_PASSTHRU);
+		PHP_MSHUTDOWN(wkhtmltox_image)(INIT_FUNC_ARGS_PASSTHRU);
 
-	UNREGISTER_INI_ENTRIES();
+		UNREGISTER_INI_ENTRIES();
+	}
 
 	return SUCCESS;
 } /* }}} */
