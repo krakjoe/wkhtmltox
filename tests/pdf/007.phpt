@@ -2,6 +2,7 @@
 wkhtmltopdf converter
 --SKIPIF--
 <?php if (!extension_loaded("wkhtmltox")) print "skip"; ?>
+<?php if (false !== getenv("APPVEYOR")) print "skip"; ?>
 --FILE--
 <?php
 $converter = new wkhtmltox\PDF\Converter();
