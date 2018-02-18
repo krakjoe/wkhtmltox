@@ -94,22 +94,22 @@ environment:
                   TS: 1
                 - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
                   ARCH: x64
-                  VC: vc14
+                  VC: vc15
                   PHP_VER: 7.2.2
                   TS: 0
                 - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
                   ARCH: x64
-                  VC: vc14
+                  VC: vc15
                   PHP_VER: 7.2.2
                   TS: 1
                 - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
                   ARCH: x86
-                  VC: vc14
+                  VC: vc15
                   PHP_VER: 7.2.2
                   TS: 0
                 - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
                   ARCH: x86
-                  VC: vc14
+                  VC: vc15
                   PHP_VER: 7.2.2
                   TS: 1
 
