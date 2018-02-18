@@ -118,7 +118,8 @@ build_script:
                 $conf_cmd = 'call configure --with-wkhtmltox --with-extra-libs=c:\build-cache\libwkhtmltox\lib --with-extra-includes=c:\build-cache\libwkhtmltox\include --enable-debug-pack 2>&1'
                 echo $conf_cmd | Out-File -Encoding "ASCII" -Append task.bat
                 echo "nmake /nologo 2>&1" | Out-File -Encoding "ASCII" -Append task.bat
-                $here = (Get-Item -Path ".\" -Verbose).FullName
+                echo "exit %errorlevel%" | Out-File -Encoding "ASCII" -Append task.bat
+                $here = (Get-Item -Path "." -Verbose).FullName
                 $runner = 'c:\build-cache\php-sdk-' + $env:BIN_SDK_VER + '\phpsdk' + '-' + $env:VC + '-' + $env:ARCH + '.bat'
                 $task = $here + '\task.bat'
                 & $runner -t $task
@@ -152,11 +153,13 @@ test_script:
                 }
                 cd c:\projects\wkhtmltox
                 echo "" | Out-File -Encoding "ASCII" task.bat
+                echo "set REPORT_EXIT_STATUS=1" | Out-File -Encoding "ASCII" -Append task.bat
                 $cmd = 'call configure --with-wkhtmltox --with-extra-libs=c:\build-cache\libwkhtmltox\lib --with-extra-includes=c:\build-cache\libwkhtmltox\include --with-prefix=c:\build-cache\' + $dname + ' 2>&1'
                 echo $cmd | Out-File -Encoding "ASCII" -Append task.bat
                 echo 'set path=c:\build-cache\libwkhtmltox\bin;%path%' | Out-File -Encoding "ASCII" -Append task.bat
                 echo 'nmake /nologo test TESTS="-q --show-diff --set-timeout 120" 2>&1' | Out-File -Encoding "ASCII" -Append task.bat
-                $here = (Get-Item -Path ".\" -Verbose).FullName
+                echo "exit %errorlevel%" | Out-File -Encoding "ASCII" -Append task.bat
+                $here = (Get-Item -Path "." -Verbose).FullName
                 $runner = 'c:\build-cache\php-sdk-' + $env:BIN_SDK_VER + '\phpsdk' + '-' + $env:VC + '-' + $env:ARCH + '.bat'
                 $task = $here + '\task.bat'
                 & $runner -t $task
