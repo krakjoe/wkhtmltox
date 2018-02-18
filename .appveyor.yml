@@ -27,6 +27,7 @@ install:
                 $lname0 = 'wkhtmltox-' + $env:WKHTML_LIB_VER + '_msvc2015-' + $arch_part + '.exe'
                 $lname1 = 'libwkhtmltox'
                 if (-not (Test-Path c:\build-cache\$lname0)) {
+                        # vc14 is fine also for vc15 builds with PHP
                         (new-object net.webclient).DownloadFile('https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/' + $env:WKHTML_LIB_VER + '/' + $lname0, 'c:\build-cache\' + $lname0)
                 }
                 if (-not (Test-Path c:\build-cache\$lname1)) {
@@ -54,42 +55,62 @@ environment:
                 - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
                   ARCH: x64
                   VC: vc14
-                  PHP_VER: 7.0.25
+                  PHP_VER: 7.0.27
                   TS: 0
                 - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
                   ARCH: x64
                   VC: vc14
-                  PHP_VER: 7.0.25
+                  PHP_VER: 7.0.27
                   TS: 1
                 - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
                   ARCH: x86
                   VC: vc14
-                  PHP_VER: 7.0.25
+                  PHP_VER: 7.0.27
                   TS: 0
                 - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
                   ARCH: x86
                   VC: vc14
-                  PHP_VER: 7.0.25
+                  PHP_VER: 7.0.27
                   TS: 1
                 - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
                   ARCH: x64
                   VC: vc14
-                  PHP_VER: 7.1.11
+                  PHP_VER: 7.1.14
                   TS: 0
                 - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
                   ARCH: x64
                   VC: vc14
-                  PHP_VER: 7.1.11
+                  PHP_VER: 7.1.14
                   TS: 1
                 - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
                   ARCH: x86
                   VC: vc14
-                  PHP_VER: 7.1.11
+                  PHP_VER: 7.1.14
                   TS: 0
                 - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
                   ARCH: x86
                   VC: vc14
-                  PHP_VER: 7.1.11
+                  PHP_VER: 7.1.14
+                  TS: 1
+                - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+                  ARCH: x64
+                  VC: vc14
+                  PHP_VER: 7.2.2
+                  TS: 0
+                - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+                  ARCH: x64
+                  VC: vc14
+                  PHP_VER: 7.2.2
+                  TS: 1
+                - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+                  ARCH: x86
+                  VC: vc14
+                  PHP_VER: 7.2.2
+                  TS: 0
+                - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+                  ARCH: x86
+                  VC: vc14
+                  PHP_VER: 7.2.2
                   TS: 1
 
 build_script:
