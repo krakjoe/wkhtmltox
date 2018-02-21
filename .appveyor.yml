@@ -41,7 +41,7 @@ install:
                         }
                 }
                 if (-not (Test-Path c:\build-cache\LICENSE_WKHTMLTOPDF)) {
-                        Invoke-WebRequest "https://raw.githubusercontent.com/wkhtmltopdf/wkhtmltopdf/master/LICENSE', 'c:\build-cache\LICENSE_WKHTMLTOPDF')
+                        Invoke-WebRequest "https://raw.githubusercontent.com/wkhtmltopdf/wkhtmltopdf/master/LICENSE" -OutFile "c:\build-cache\LICENSE_WKHTMLTOPDF"
                 }
 
 
