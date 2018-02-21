@@ -28,7 +28,8 @@ install:
                 $lname1 = 'libwkhtmltox'
                 if (-not (Test-Path c:\build-cache\$lname0)) {
                         # vc14 is fine also for vc15 builds with PHP
-                        Invoke-WebRequest "https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/' + $env:WKHTML_LIB_VER + '/' + $lname0, 'c:\build-cache\' + $lname0)
+                        $url = "https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/" + $env:WKHTML_LIB_VER + "/" + $lname0
+                        Invoke-WebRequest $url -OutFile "c:\build-cache\$lname0"
                 }
                 if (-not (Test-Path c:\build-cache\$lname1)) {
                         & 7z x c:\build-cache\$lname0 -oc:\build-cache\$lname1
