@@ -14,7 +14,7 @@ install:
                 }
                 $bname = 'php-sdk-' + $env:BIN_SDK_VER + '.zip'
                 if (-not (Test-Path c:\build-cache\$bname)) {
-                        (new-object net.webclient).DownloadFile('https://github.com/OSTC/php-sdk-binary-tools/archive/' + $bname, 'c:\build-cache\' + $bname)
+                        Invoke-WebRequest "https://github.com/OSTC/php-sdk-binary-tools/archive/$bname" -OutFile "c:\build-cache\$bname"
                 }
                 $dname0 = 'php-sdk-binary-tools-php-sdk-' + $env:BIN_SDK_VER
                 $dname1 = 'php-sdk-' + $env:BIN_SDK_VER
@@ -28,7 +28,7 @@ install:
                 $lname1 = 'libwkhtmltox'
                 if (-not (Test-Path c:\build-cache\$lname0)) {
                         # vc14 is fine also for vc15 builds with PHP
-                        (new-object net.webclient).DownloadFile('https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/' + $env:WKHTML_LIB_VER + '/' + $lname0, 'c:\build-cache\' + $lname0)
+                        Invoke-WebRequest "https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/' + $env:WKHTML_LIB_VER + '/' + $lname0, 'c:\build-cache\' + $lname0)
                 }
                 if (-not (Test-Path c:\build-cache\$lname1)) {
                         & 7z x c:\build-cache\$lname0 -oc:\build-cache\$lname1
@@ -41,7 +41,7 @@ install:
                         }
                 }
                 if (-not (Test-Path c:\build-cache\LICENSE_WKHTMLTOPDF)) {
-                        (new-object net.webclient).DownloadFile('https://raw.githubusercontent.com/wkhtmltopdf/wkhtmltopdf/master/LICENSE', 'c:\build-cache\LICENSE_WKHTMLTOPDF')
+                        Invoke-WebRequest "https://raw.githubusercontent.com/wkhtmltopdf/wkhtmltopdf/master/LICENSE', 'c:\build-cache\LICENSE_WKHTMLTOPDF')
                 }
 
 
@@ -49,7 +49,7 @@ cache:
         c:\build-cache -> .appveyor.yml
 
 environment:
-        BIN_SDK_VER: 2.0.12
+        BIN_SDK_VER: 2.1.1
         WKHTML_LIB_VER: 0.12.4
         matrix:
                 - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
@@ -119,9 +119,9 @@ build_script:
                 if ('0' -eq $env:TS) { $ts_part = '-nts' }
                 $bname = 'php-devel-pack-' + $env:PHP_VER + $ts_part + '-Win32-' + $env:VC.toUpper() + '-' + $env:ARCH + '.zip'
                 if (-not (Test-Path c:\build-cache\$bname)) {
-                        (new-object net.webclient).DownloadFile('http://windows.php.net/downloads/releases/archives/' + $bname, 'c:\build-cache\' + $bname)
+                        Invoke-WebRequest "http://windows.php.net/downloads/releases/archives/$bname" -OutFile "c:\build-cache\$bname"
                         if (-not (Test-Path c:\build-cache\$bname)) {
-                                (new-object net.webclient).DownloadFile('http://windows.php.net/downloads/releases/' + $bname, 'c:\build-cache\' + $bname)
+                                Invoke-WebRequest "http://windows.php.net/downloads/releases/$bname" -OutFile "c:\build-cache\$bname"
                         }
                 }
                 $dname0 = 'php-' + $env:PHP_VER + '-devel-' + $env:VC.toUpper() + '-' + $env:ARCH
@@ -163,9 +163,9 @@ test_script:
                 if ('0' -eq $env:TS) { $ts_part = '-nts' }
                 $bname = 'php-' + $env:PHP_VER + $ts_part + '-Win32-' + $env:VC.toUpper() + '-' + $env:ARCH + '.zip'
                 if (-not (Test-Path c:\build-cache\$bname)) {
-                        (new-object net.webclient).DownloadFile('http://windows.php.net/downloads/releases/archives/' + $bname, 'c:\build-cache\' + $bname)
+                        Invoke-WebRequest "http://windows.php.net/downloads/releases/archives/$bname" -OutFile "c:\build-cache\$bname"
                         if (-not (Test-Path c:\build-cache\$bname)) {
-                                (new-object net.webclient).DownloadFile('http://windows.php.net/downloads/releases/' + $bname, 'c:\build-cache\' + $bname)
+                                Invoke-WebRequest "http://windows.php.net/downloads/releases/$bname" -OutFile "c:\build-cache\$bname"
                         }
                 }
                 $dname = 'php-' + $env:PHP_VER + $ts_part + '-' + $env:VC.toUpper() + '-' + $env:ARCH
